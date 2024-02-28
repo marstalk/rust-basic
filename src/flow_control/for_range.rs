@@ -9,7 +9,7 @@ pub fn consume_vec(mut v: Vec<i32>) {
     }
 }
 
-pub fn consume_vec_ref(mut v: &Vec<i32>) {
+pub fn consume_vec_ref(v: &Vec<i32>) {
     // for item in v.iter_mut(){
     //     println!("item: {}", item);
     // }

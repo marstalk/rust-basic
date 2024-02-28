@@ -19,7 +19,7 @@ pub struct Addr{
 pub fn match_struct(user: User) -> String{
     let rtn = match user {
         User{age: 18, name, ..} => format!("{} is 18 years old", name),
-        User{score: 60f64, id, ..} => format!("{} is 60 score", id),
+        //User{score: 60f64, id, ..} => format!("{} is 60 score", id),
         User{name, addr: Addr{city,..}, age: 20,..} => format!("{} is from {}", name, city),
         _ => "other".to_string(),
     };
