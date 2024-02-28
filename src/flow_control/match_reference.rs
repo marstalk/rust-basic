@@ -31,7 +31,7 @@ pub fn match_reference_str(s: &str) -> String {
 }
 
 // 4.0 String match
-pub fn match_string(s: String) -> String{
+pub fn match_string(s: String) -> String {
     match s {
         wothehell => wothehell.to_owned(),
     }
@@ -42,7 +42,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_match_string(){
+    fn test_match_string() {
         assert_eq!(match_string("hello".to_owned()), "hello".to_owned());
     }
 

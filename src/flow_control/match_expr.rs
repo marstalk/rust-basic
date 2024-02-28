@@ -134,7 +134,7 @@ mod tests {
         assert_eq!(get_string_by_number(4), "four to ten");
         assert!(get_string_by_number(11) == "eleven or twelve");
         assert_eq!(get_string_by_number(30), "other");
-        assert_eq!(get_string_by_number(22),  "20~30 : 22");
-        assert_eq!(get_string_by_number(24),  "20~30 : 24");
+        assert_eq!(get_string_by_number(22), "20~30 : 22");
+        assert_eq!(get_string_by_number(24), "20~30 : 24");
     }
 }

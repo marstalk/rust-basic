@@ -1,6 +1,4 @@
-pub fn reference_1() {
-
-}
+pub fn reference_1() {}
 
 #[cfg(test)]
 mod tests {
@@ -12,7 +10,7 @@ mod tests {
         let ref _i = 99;
 
         let ref mut j = 99;
-        *j += 1;// doesn't have ownership, but it can change the value.
+        *j += 1; // doesn't have ownership, but it can change the value.
         assert_eq!(j, &100);
     }
 }

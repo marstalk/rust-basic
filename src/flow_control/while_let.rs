@@ -1,18 +1,17 @@
-
-// given a option<i32>, 
+// given a option<i32>,
 // if none, return 0
 // if some greater than or equal 9, return directly
 // else increase by 1, until it's 9.
-pub fn loop_and_match(mut i_option: Option<i32>) -> i32{
-    loop{
+pub fn loop_and_match(mut i_option: Option<i32>) -> i32 {
+    loop {
         match i_option {
             Some(i) => {
                 if i >= 9 {
                     break i;
-                }else{
+                } else {
                     i_option = Some(i + 1);
                 }
-            },
+            }
             None => {
                 break 0;
             }
@@ -20,10 +19,9 @@ pub fn loop_and_match(mut i_option: Option<i32>) -> i32{
     }
 }
 
-
 /// while_let version to optimize loop_and_match.
-pub fn while_let(mut i_option: Option<i32>) -> i32{
-    while let Some(i) = i_option{
+pub fn while_let(mut i_option: Option<i32>) -> i32 {
+    while let Some(i) = i_option {
         if i >= 9 {
             return i;
         }
@@ -34,19 +32,19 @@ pub fn while_let(mut i_option: Option<i32>) -> i32{
 }
 
 #[cfg(test)]
-mod tests{
+mod tests {
     use super::*;
 
     #[test]
-    fn test_while_let(){
+    fn test_while_let() {
         assert_eq!(while_let(Some(5)), 9);
         assert_eq!(while_let(Some(7)), 9);
         assert_eq!(while_let(Some(50)), 50);
         assert_eq!(while_let(None), 0);
     }
-    
+
     #[test]
-    fn test_loop_and_match(){
+    fn test_loop_and_match() {
         assert_eq!(loop_and_match(Some(5)), 9);
         assert_eq!(loop_and_match(Some(10)), 10);
         assert_eq!(loop_and_match(None), 0);
