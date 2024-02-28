@@ -36,6 +36,14 @@ pub fn while_let(mut i_option: Option<i32>) -> i32{
 #[cfg(test)]
 mod tests{
     use super::*;
+
+    #[test]
+    fn test_while_let(){
+        assert_eq!(while_let(Some(5)), 9);
+        assert_eq!(while_let(Some(7)), 9);
+        assert_eq!(while_let(Some(50)), 50);
+        assert_eq!(while_let(None), 0);
+    }
     
     #[test]
     fn test_loop_and_match(){
