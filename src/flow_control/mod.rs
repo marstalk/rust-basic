@@ -5,3 +5,5 @@ pub mod match_struct;
 pub mod match_guards;
 pub mod match_binding;
 pub mod if_let;
+pub mod let_else;
+pub mod while_let;
