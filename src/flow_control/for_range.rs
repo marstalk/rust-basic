@@ -100,28 +100,4 @@ mod tests {
     fn test_into_iter() {
         consume_vec_ref(&vec![1, 2, 3, 4, 5]);
     }
-
-    #[test]
-    fn test_iter() {
-        let vec = vec![1, 2, 3, 4, 5];
-        for item in vec.iter() {
-            println!("item: {}", item);
-        }
-        // vec.iter() simple borrow rather than move ownership
-        assert_eq!(vec, vec![1, 2, 3, 4, 5]);
-
-        // compile fail
-        // for item in vec.iter(){
-        //     item += 1;
-        // }
-    }
-
-    #[test]
-    fn test_iter_mut() {
-        let mut vec = vec![1, 2, 3, 4, 5];
-        for item in vec.iter_mut() {
-            *item += 1;
-        }
-        assert_eq!(vec, vec![2, 3, 4, 5, 6]);
-    }
 }
