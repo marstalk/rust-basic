@@ -1,3 +1,11 @@
+/***
+ * 1. for range
+ * 2. vector/array/tuple iter(), iter_mut(), into_iter()
+ * 3.
+ */
+
+use std::collections::HashMap;
+
 pub fn consume_vec(mut v: Vec<i32>) {
     for item in v.iter() {
         println!("item: {}", item);
@@ -38,9 +46,29 @@ pub fn consume_array(arr: [i32; 2]) -> String {
     rtn
 }
 
-pub fn add_one_for_each(arr: &mut [i32; 3]) {
+pub fn add_two_for_each(arr: &mut [i32; 3]) {
+    for item in arr.iter_mut() {
+        *item += 1;
+    }
+
+    // equals to into_iter(), so arr is no longer valid.
     for item in arr {
         *item += 1;
+    }
+    // println!("{:?}", arr);
+}
+
+// doesn't support tuple
+// pub fn consume_tuple(tu: &mut (i32, String)){
+//     for (idx, item) in tu.iter(){
+
+//     }
+// }
+
+pub fn consume_hashmap(map: &mut HashMap<String, i32>) {
+    for (k, v) in map.iter_mut() {
+        println!("{} updated value", k);
+        *v += 1;
     }
 }
 
@@ -49,10 +77,18 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_consume_hashmap() {
+        let mut map = HashMap::from([(String::from("apple"), 1), (String::from("banana"), 3)]);
+        consume_hashmap(&mut map);
+        assert_eq!(map.get("apple"), Some(&2));
+        assert_eq!(map.get("banana"), Some(&4));
+    }
+
+    #[test]
     fn test_add_one_for_each() {
         let mut arr = [1, 2, 3];
-        add_one_for_each(&mut arr);
-        assert_eq!(arr, [2, 3, 4]);
+        add_two_for_each(&mut arr);
+        assert_eq!(arr, [3, 4, 5]);
     }
 
     #[test]
