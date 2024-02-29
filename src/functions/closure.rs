@@ -1,3 +1,10 @@
+/**
+* in clsoure. it will infer to use:
+   1. immutable borrow.
+   2. mutable borrow.
+   3. move
+ */
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -21,7 +28,7 @@ mod tests {
     #[test]
     fn test_closure_immutable_borrow() {
         let mut x = 10;
-        // immutable borrow
+        // immutable borrow can meet the needs. so the immutable borrow happens here.
         let print_closure = || println!("{}", x);
         print_closure();
 
@@ -44,6 +51,7 @@ mod tests {
 
         // must add [mut] here.
         let mut increase_and_print = || {
+            // x is mutable here, so mutable borrow happen here.
             x += 1;
             println!("x = {}", x);
         };
@@ -66,6 +74,7 @@ mod tests {
         let movable = Box::new(2);
         let print_and_free = || {
             println!("movable = {}", movable);
+            // drop require the ownership, so move happen here.
             std::mem::drop(movable);
         };
 
@@ -73,5 +82,19 @@ mod tests {
 
         // movable is invalid.
         // println!("{:?}", movable);
+    }
+
+    // use [move] keyword in front of vetical || indicate the closure to take ownership of captured.
+    #[test]
+    fn test_force_move() {
+        let vec = vec![1, 2, 3];
+        let moved_closure = move |item| vec.contains(item);
+        assert_eq!(true, moved_closure(&1));
+        assert_eq!(false, moved_closure(&4));
+
+        // because vec is moved, means invalid.
+        // println!("{:?}", vec);
+
+        // once moved_closure is out of scope, then moved_closure and vec will be drop.
     }
 }
