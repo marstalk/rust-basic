@@ -3,7 +3,7 @@ pub fn consume_vec(mut v: Vec<i32>) {
         println!("item: {}", item);
     }
 
-    // can't mutable iteration
+    // mutable iteration
     for item in v.iter_mut() {
         *item += 1
     }
@@ -30,9 +30,35 @@ pub fn consume_vec3(v: Vec<i32>) {
     //println!("{:?}", v);
 }
 
+pub fn consume_array(arr: [i32; 2]) -> String {
+    let mut rtn = String::from("");
+    for item in arr.iter() {
+        rtn.push_str(&item.to_string());
+    }
+    rtn
+}
+
+pub fn add_one_for_each(arr: &mut [i32; 3]) {
+    for item in arr {
+        *item += 1;
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_add_one_for_each() {
+        let mut arr = [1, 2, 3];
+        add_one_for_each(&mut arr);
+        assert_eq!(arr, [2, 3, 4]);
+    }
+
+    #[test]
+    fn test_consume_array() {
+        assert_eq!(consume_array([1, 2]), "12");
+    }
 
     #[test]
     fn test_into_iter() {
