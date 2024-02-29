@@ -97,4 +97,37 @@ mod tests {
 
         // once moved_closure is out of scope, then moved_closure and vec will be drop.
     }
+
+    #[test]
+    fn test_supplier() {
+        let supplier = || String::from("hello");
+
+        assert_eq!(supplier(), "hello");
+    }
+
+    #[test]
+    fn test_function() {
+        let function = |mut x: i32| {
+            x += 1;
+            format!("{} increased", x)
+        };
+
+        assert_eq!(function(1), "2 increased");
+    }
+
+    #[test]
+    fn test_consumer() {
+        let consumer = |x: String| {
+            println!("{}", x);
+        };
+
+        consumer("hello".to_string());
+    }
+
+    #[test]
+    fn test_bi_function() {
+        let bi_function = |x: i32, y: String| -> String { format!("{}{}", x, y) };
+
+        assert_eq!(bi_function(1, "hello".to_owned()), "1hello");
+    }
 }

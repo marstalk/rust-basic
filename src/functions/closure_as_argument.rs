@@ -30,9 +30,27 @@ pub fn apply_fn2<F: Fn()>(f: F) {
     f();
 }
 
+pub fn apply_fn3<F: FnOnce() -> String>(f: F) -> String {
+    let mut s = f();
+    s.push_str(" updated");
+    s
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_fn3() {
+        let mut s = String::from("hello");
+        let my_closure = || {
+            s.push_str(" rust");
+            s
+        };
+
+        let s = apply_fn3(my_closure);
+        assert_eq!(s, "hello rust updated");
+    }
 
     #[test]
     fn test_fn2() {
