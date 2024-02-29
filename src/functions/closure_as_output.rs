@@ -1,4 +1,4 @@
-fn create_fn() -> impl Fn() {
+pub fn create_fn() -> impl Fn() {
     let a = String::from("hello");
     // since return is Fn which is immutable borrow, so here it's invalid for mutable borrow.
     //move || a.push_str("_fn")

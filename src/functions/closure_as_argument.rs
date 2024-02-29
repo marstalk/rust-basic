@@ -5,6 +5,8 @@
    FnOnce: the closure uses the captured value by value (T)
 */
 
+use std::fmt::Display;
+
 pub fn apply_fn_once<F>(f: F)
 where
     F: FnOnce(),
@@ -36,9 +38,29 @@ pub fn apply_fn3<F: FnOnce() -> String>(f: F) -> String {
     s
 }
 
+//TODO consumer
+
+//TODO function
+
+// bifunction
+// pub fn operation<F: Fn() -> T, T>(f: F, x:T, y: T) -> T{
+//     f(x, y)
+// }
+
+//TODO supplier
+pub fn supplier<F: Fn() -> R, R: Display>(f: F) -> String {
+    format!("{} is formatted", f())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_supplier() {
+        let closure = || 5;
+        assert_eq!(supplier(closure), "5 is formatted");
+    }
 
     #[test]
     fn test_fn3() {
