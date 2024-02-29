@@ -38,16 +38,23 @@ pub fn apply_fn3<F: FnOnce() -> String>(f: F) -> String {
     s
 }
 
-//TODO consumer
-
-//TODO function
+// consumer
+pub fn consumer<F, T>(f: F, item: T)
+where
+    F: Fn(T),
+{
+    f(item)
+}
 
 // bifunction
-// pub fn operation<F: Fn() -> T, T>(f: F, x:T, y: T) -> T{
-//     f(x, y)
-// }
+pub fn operation<F, T>(f: F, x: T, y: T) -> T
+where
+    F: Fn(T, T) -> T,
+{
+    f(x, y)
+}
 
-//TODO supplier
+// supplier
 pub fn supplier<F: Fn() -> R, R: Display>(f: F) -> String {
     format!("{} is formatted", f())
 }
@@ -55,6 +62,24 @@ pub fn supplier<F: Fn() -> R, R: Display>(f: F) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_function() {
+        let addition = |x: i32, y: i32| x + y;
+        assert_eq!(operation(addition, 1, 1), 2);
+
+        let substract = |x: f64, y: f64| x - y;
+        assert_eq!(operation(substract, 2.0f64, 1.1f64), 2.0 - 1.1);
+
+        let concatenate = |mut x: String, y: String| {
+            x.push_str(&y);
+            x
+        };
+        assert_eq!(
+            operation(concatenate, "hello".to_owned(), "rust".to_owned()),
+            "hellorust"
+        );
+    }
 
     #[test]
     fn test_supplier() {
