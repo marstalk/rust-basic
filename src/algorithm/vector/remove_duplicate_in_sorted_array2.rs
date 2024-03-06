@@ -20,7 +20,7 @@ use std::collections::HashMap;
 
 pub struct Solution {}
 impl Solution {
-    pub fn remove_dupliates(nums: &mut Vec<i32>) -> i32 {
+    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
         let mut idx = -1i32;
         let mut map: HashMap<i32, i32> = HashMap::new();
         for i in 0..nums.len() {
@@ -39,7 +39,21 @@ impl Solution {
 
     // because it's  non-decreasing order, so we can use double pointer.
     pub fn remove_duplicates2(nums: &mut Vec<i32>) -> i32 {
-        0
+        if nums.len() <= 2 {
+            return nums.len() as i32;
+        }
+        let mut idx = 1usize;
+        for i in 1..nums.len() {
+            if nums[i] != nums[idx] {
+                idx += 1;
+                nums[idx] = nums[i];
+            } else if nums[idx] != nums[idx - 1] && idx < i {
+                // make sure idx < i, to handle the case of [1,2,3] when idx=1,i=1
+                idx += 1;
+                nums[idx] = nums[i];
+            }
+        }
+        idx as i32 + 1
     }
 }
 
@@ -50,8 +64,26 @@ mod tests {
     #[test]
     fn test_remove_dupliates() {
         let mut nums = vec![1, 1, 1, 2, 2, 3];
-        let k = Solution::remove_dupliates(&mut nums);
+        let k = Solution::remove_duplicates(&mut nums);
         assert_eq!(k, 5);
         assert_eq!(nums[0..k as usize], vec![1, 1, 2, 2, 3]);
+    }
+
+    #[test]
+    fn test_remove_dupliates2() {
+        let mut nums = vec![1, 1, 1, 2, 2, 3];
+        let k = Solution::remove_duplicates2(&mut nums);
+        assert_eq!(k, 5);
+        assert_eq!(nums[0..k as usize], vec![1, 1, 2, 2, 3]);
+
+        let mut nums = vec![1, 2, 2];
+        let k = Solution::remove_duplicates2(&mut nums);
+        assert_eq!(k, 3);
+        assert_eq!(nums[0..k as usize], vec![1, 2, 2]);
+
+        let mut nums = vec![1, 2, 3];
+        let k = Solution::remove_duplicates2(&mut nums);
+        assert_eq!(k, 3);
+        assert_eq!(nums[0..k as usize], vec![1, 2, 3]);
     }
 }
