@@ -1,10 +1,16 @@
 /***
- * https://leetcode.cn/problems/remove-duplicates-from-sorted-array/submissions/504623758/
- * Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
+https://leetcode.cn/problems/remove-duplicates-from-sorted-array/submissions/504623758/
+Given an integer array nums sorted in non-decreasing order,
+remove the duplicates in-place such that each unique element appears only once.
+The relative order of the elements should be kept the same.
+Then return the number of unique elements in nums.
 
-Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:
+Consider the number of unique elements of nums to be k,
+to get accepted, you need to do the following things:
 
-Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially. The remaining elements of nums are not important as well as the size of nums.
+Change the array nums such that the first k elements of nums contain the unique elements in the order they were present in nums initially.
+The remaining elements of nums are not important as well as the size of nums.
+
 Return k.
  */
 
@@ -70,11 +76,40 @@ impl Solution {
 
         (idx + 1) as i32
     }
+
+    // double pointer.
+    pub fn remove_duplicates4(nums: &mut Vec<i32>) -> i32 {
+        if nums.len() <= 1 {
+            return nums.len() as i32;
+        }
+        let mut slow = 1usize;
+        let mut fast = 1usize;
+        while fast < nums.len() {
+            if nums[fast] != nums[slow - 1] {
+                nums[slow] = nums[fast];
+                slow += 1;
+            }
+            fast += 1;
+        }
+        slow as i32
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_remove_duplicates4() {
+        let mut nums = vec![1, 1, 2];
+        let k = Solution::remove_duplicates4(&mut nums);
+        assert_eq!(k, 2);
+
+        let mut nums = vec![0, 0, 1, 1, 1, 2, 2, 3, 3, 4];
+        let k = Solution::remove_duplicates4(&mut nums);
+        assert_eq!(k, 5);
+    }
+
     #[test]
     fn test_remove_duplicates() {
         let mut nums = vec![1, 1, 2];
