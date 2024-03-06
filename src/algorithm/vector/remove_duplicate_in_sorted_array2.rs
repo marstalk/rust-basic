@@ -55,11 +55,48 @@ impl Solution {
         }
         idx as i32 + 1
     }
+
+    // double pointer fast and slow
+    // slow is the index which is not handled yet.
+    pub fn remove_duplicates3(nums: &mut Vec<i32>) -> i32 {
+        if nums.len() <= 2 {
+            return nums.len() as i32;
+        }
+
+        let mut slow = 2;
+        let mut fast = 2;
+        while fast < nums.len() {
+            if nums[fast] != nums[slow - 2] {
+                nums[slow] = nums[fast];
+                slow += 1;
+            }
+            fast += 1;
+        }
+        slow as i32
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_remove_dupliates3() {
+        let mut nums = vec![1, 1, 1, 2, 2, 3];
+        let k = Solution::remove_duplicates3(&mut nums);
+        assert_eq!(k, 5);
+        assert_eq!(nums[0..k as usize], vec![1, 1, 2, 2, 3]);
+
+        let mut nums = vec![1, 2, 2];
+        let k = Solution::remove_duplicates3(&mut nums);
+        assert_eq!(k, 3);
+        assert_eq!(nums[0..k as usize], vec![1, 2, 2]);
+
+        let mut nums = vec![1, 2, 3];
+        let k = Solution::remove_duplicates3(&mut nums);
+        assert_eq!(k, 3);
+        assert_eq!(nums[0..k as usize], vec![1, 2, 3]);
+    }
 
     #[test]
     fn test_remove_dupliates() {
