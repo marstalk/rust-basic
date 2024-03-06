@@ -1,3 +1,4 @@
+pub mod algorithm;
 pub mod attribute;
 pub mod collection;
 pub mod comments;
