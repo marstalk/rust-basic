@@ -130,4 +130,9 @@ mod tests {
 
         assert_eq!(bi_function(1, "hello".to_owned()), "1hello");
     }
+
+    #[test]
+    fn test_fn() {
+        let my_closure = fun(|| -> String { String::from("hello") });
+    }
 }
