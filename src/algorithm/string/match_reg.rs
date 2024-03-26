@@ -23,7 +23,7 @@ impl Solution {
     }
 
     fn dp(s: &str, i: usize, p: &str, j: usize, mem: &mut Vec<Vec<i8>>) -> i8 {
-        //base 1: p is empty
+        // base 1: p is empty
         if j == p.len() {
             return match i == s.len() {
                 true => 1,
@@ -45,16 +45,20 @@ impl Solution {
             }
             return 1;
         }
+        // mem
         if mem[i][j] != 0 {
             return mem[i][j];
         }
+        // current
         let res;
         if s.chars().nth(i).unwrap() == p.chars().nth(j).unwrap()
             || p.chars().nth(j).unwrap() == '.'
         {
             // if p[j+1] is *
             if j < p.len() - 1 && p.chars().nth(j + 1).unwrap() == '*' {
+                // * match zero
                 let a = Solution::dp(s, i, p, j + 2, mem);
+                // * match one
                 let b = Solution::dp(s, i + 1, p, j, mem);
                 res = match (a, b) {
                     (1, _) => 1,
@@ -67,11 +71,13 @@ impl Solution {
         } else {
             // if p[j+1] is *
             if j < p.len() - 1 && p.chars().nth(j + 1).unwrap() == '*' {
+                // * match zero
                 res = Solution::dp(s, i, p, j + 2, mem);
             } else {
                 res = -1;
             }
         }
+        // update mem
         mem[i][j] = res;
         res
     }
