@@ -7,3 +7,4 @@ pub mod functions;
 pub mod module;
 pub mod ownership;
 pub mod scopes;
+pub mod smartpointers;
