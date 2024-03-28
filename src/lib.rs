@@ -10,6 +10,7 @@
  * 9. scopes
  * 10. smartpointers
  * 11. concurrent
+ * 12. OOP
  */
 pub mod algorithm;
 pub mod attribute;
@@ -19,6 +20,7 @@ pub mod concurrent;
 pub mod flow_control;
 pub mod functions;
 pub mod module;
+pub mod oop;
 pub mod ownership;
 pub mod scopes;
 pub mod smartpointers;
