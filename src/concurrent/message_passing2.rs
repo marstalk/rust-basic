@@ -1,5 +1,5 @@
 use std::{
-    sync::mpsc::{self, Receiver, Sender},
+    sync::mpsc::{self, Receiver},
     thread,
 };
 
