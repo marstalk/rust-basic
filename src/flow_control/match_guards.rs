@@ -22,9 +22,42 @@ pub fn guards_user(user: &User) -> String {
     }
 }
 
+pub fn destruct_guards(user: &User) -> String {
+    match user {
+        User {
+            id: id_value @ 1..=5,
+            ..
+        } => {
+            format!("id={} from [1,5]", id_value)
+        }
+        _ => String::from("other"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_destruct_user() {
+        let mut tyl: User = User {
+            id: 4,
+            name: String::from("tangbanxian"),
+            age: 18,
+            male: true,
+            score: 66.0f64,
+            friends: vec![String::from("liuyouer"), String::from("laiage")],
+            addr: Addr {
+                province: String::from("Guangdong"),
+                city: String::from("Shenzhen"),
+            },
+        };
+        let res = destruct_guards(&tyl);
+        assert_eq!("id=4 from [1,5]", res);
+
+        tyl.id = 8;
+        assert_eq!("other", destruct_guards(&tyl));
+    }
 
     #[test]
     fn test_guards_user() {
