@@ -1,3 +1,4 @@
+pub mod advance_features;
 /**
  * 1. algorithm
  * 2. attribute
@@ -11,6 +12,7 @@
  * 10. smartpointers
  * 11. concurrent
  * 12. OOP
+ * 13. advanced features
  */
 pub mod algorithm;
 pub mod attribute;
