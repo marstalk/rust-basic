@@ -82,19 +82,28 @@ impl Solution {
     }
 
     /**
-     * solution from leetcode, TODO custom iterator.
+     * solution from leetcode, custom iterator.
      */
     pub fn convert2(s: String, num_rows: i32) -> String {
-        // 为什么输入类型总是i32
         let num_rows = num_rows as usize;
-        // 每行一个String
-        let mut rows = vec![String::new(); num_rows];
-        // z字形往复的迭代器，01232101232......
-        let iter = (0..num_rows).chain((1..num_rows - 1).rev()).cycle();
-        // 按迭代器给出的下标访问对应行，推入字符
-        iter.zip(s.chars()).for_each(|(i, c)| rows[i].push(c));
-        // collect连接每行
-        rows.into_iter().collect()
+
+        // 1. iterator A: 0123432101234...
+        let iterator_a = (0..num_rows).chain((1..num_rows - 1).rev()).cycle();
+
+        // 2. iterator B: 0123456789...
+        let iterator_b = s.chars().into_iter();
+
+        // 3. use zip to iterate A and B
+        let iterator_c = iterator_a.zip(iterator_b);
+
+        // 4. iterate and push to corresponding string.
+        let mut strings = vec![String::from(""); num_rows];
+        iterator_c.into_iter().for_each(|(string_idx, char)| {
+            strings[string_idx].push(char);
+        });
+
+        // 5. join strings
+        strings.into_iter().collect()
     }
 }
 
