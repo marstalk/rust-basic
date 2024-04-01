@@ -1,5 +1,3 @@
-#![allow(unused_variables)]
-
 #[derive(Debug)]
 pub struct Node {
     val: i32,
@@ -58,11 +56,52 @@ impl LinkedList {
         }
     }
 
+    pub fn remove_tail(&mut self) -> Option<i32> {
+        if let Some(mut current) = &mut self.head {
+            // Check if the list has only one element
+            if current.next.is_none() {
+                return self.head.take().map(|node| node.val);
+            }
+
+            // Traverse until the second-to-last node
+            while let Some(ref mut next_node) = current.next {
+                if next_node.next.is_none() {
+                    // Remove the last node
+                    let removed_node = current.next.take();
+                    return removed_node.map(|node| node.val);
+                }
+                current = next_node;
+            }
+        }
+        None // If the list is empty
+    }
+
     /**
      * remove target element if exist.
      */
     pub fn remove_first_hit(&mut self, val: i32) {
-        //TODO
+        self.head = LinkedList::remove_elements(self.head.take(), val, false);
+    }
+
+    pub fn remove_hit(&mut self, val: i32) {
+        let head = self.head.take();
+        self.head = LinkedList::remove_elements(head, val, true);
+    }
+
+    fn remove_elements(head: Option<Box<Node>>, val: i32, all: bool) -> Option<Box<Node>> {
+        let mut dummy = Node { val: 0, next: head };
+        let mut pre = &mut dummy;
+        while let Some(ref mut node) = pre.next {
+            if node.val == val {
+                pre.next = node.next.take();
+                if !all {
+                    break;
+                }
+            } else {
+                pre = pre.next.as_mut().unwrap();
+            }
+        }
+        dummy.next
     }
 
     pub fn push_head(&mut self, val: i32) {
@@ -106,8 +145,6 @@ impl LinkedList {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::linked_list;
-
     use super::*;
 
     #[test]
