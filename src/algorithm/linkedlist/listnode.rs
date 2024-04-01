@@ -12,6 +12,18 @@ pub struct LinkedList {
 }
 
 impl LinkedList {
+    pub fn reverse_imperative(&mut self) {
+        let mut current = self.head.take();
+        let mut prev = None;
+        while let Some(mut node) = current {
+            let next = node.next.take();
+            node.next = prev;
+            current = next;
+            prev = Some(node);
+        }
+        self.head = prev;
+    }
+
     pub fn reverse_recursive(&mut self) {
         // ownership of head moved.
         let mut head = self.head.take();
@@ -25,34 +37,14 @@ impl LinkedList {
         mut current: Option<Box<Node>>,
         prev: Option<Box<Node>>,
     ) {
-        if let Some(mut current) = current.take() {
-            let next_node = current.next.take();
-            current.next = prev;
-            self.reverse_recursive_helper(next_node, Some(current));
+        if let Some(mut current_box) = current.take() {
+            let next_node = current_box.next.take();
+            current_box.next = prev;
+            self.reverse_recursive_helper(next_node, Some(current_box));
         } else {
             // if current node is None which means it's the end of linked list, so set prev (the last node) as the new head.
             self.head = prev;
         }
-    }
-
-    pub fn reverse_imperative(&mut self) {
-        let mut current = self.head.take();
-        let mut prev = None;
-        while let Some(mut node) = current {
-            let next = node.next.take();
-            node.next = prev;
-            current = next;
-            prev = Some(node);
-        }
-        self.head = prev;
-    }
-
-    pub fn push_head(&mut self, val: i32) {
-        let node = Box::new(Node {
-            val: val,
-            next: self.head.take(),
-        });
-        self.head = Some(node);
     }
 
     pub fn remove_head(&mut self) -> Option<i32> {
@@ -73,6 +65,35 @@ impl LinkedList {
         //TODO
     }
 
+    pub fn push_head(&mut self, val: i32) {
+        let node = Box::new(Node {
+            val: val,
+            next: self.head.take(),
+        });
+        self.head = Some(node);
+    }
+
+    pub fn append_tail_imperative(&mut self, val: i32) {
+        let mut current = &mut self.head;
+        while let Some(ref mut node) = current {
+            current = &mut node.next;
+        }
+
+        *current = Some(Box::new(Node { val, next: None }));
+    }
+
+    pub fn append_tail_recursive(&mut self, val: i32) {
+        LinkedList::append_tail_recursive_helper(&mut self.head, val);
+    }
+    fn append_tail_recursive_helper(head: &mut Option<Box<Node>>, val: i32) {
+        if let Some(head_box) = head {
+            let next = &mut head_box.next;
+            LinkedList::append_tail_recursive_helper(next, val);
+        } else {
+            *head = Some(Box::new(Node { val, next: None }));
+        }
+    }
+
     pub fn from_vec(v: Vec<i32>) -> LinkedList {
         let mut linked_list = LinkedList { head: None };
         for i in v.into_iter().rev() {
@@ -85,7 +106,29 @@ impl LinkedList {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::linked_list;
+
     use super::*;
+
+    #[test]
+    fn test_append_tail_recursive() {
+        let mut linked_list = LinkedList::from_vec(vec![0]);
+        linked_list.append_tail_recursive(1);
+        linked_list.append_tail_recursive(2);
+        assert_eq!(linked_list.remove_head().unwrap(), 0);
+        assert_eq!(linked_list.remove_head().unwrap(), 1);
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+    }
+
+    #[test]
+    fn test_append_tail_imperative() {
+        let mut linked_list = LinkedList::from_vec(vec![0]);
+        linked_list.append_tail_imperative(1);
+        linked_list.append_tail_imperative(2);
+        assert_eq!(linked_list.remove_head().unwrap(), 0);
+        assert_eq!(linked_list.remove_head().unwrap(), 1);
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+    }
 
     #[test]
     fn test_reverse_imperative() {
@@ -103,6 +146,17 @@ mod tests {
         assert_eq!(linked_list.remove_head().unwrap(), 3);
         assert_eq!(linked_list.remove_head().unwrap(), 2);
         assert_eq!(linked_list.remove_head().unwrap(), 1);
+    }
+
+    #[test]
+    fn test_push_head() {
+        let mut linked_list = LinkedList::from_vec(vec![0]);
+        linked_list.push_head(1);
+        linked_list.push_head(2);
+
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+        assert_eq!(linked_list.remove_head().unwrap(), 1);
+        assert_eq!(linked_list.remove_head().unwrap(), 0);
     }
 
     #[test]
