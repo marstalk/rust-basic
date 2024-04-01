@@ -57,51 +57,59 @@ impl LinkedList {
     }
 
     pub fn remove_tail(&mut self) -> Option<i32> {
-        if let Some(mut current) = &mut self.head {
-            // Check if the list has only one element
-            if current.next.is_none() {
-                return self.head.take().map(|node| node.val);
-            }
-
-            // Traverse until the second-to-last node
-            while let Some(ref mut next_node) = current.next {
-                if next_node.next.is_none() {
-                    // Remove the last node
-                    let removed_node = current.next.take();
-                    return removed_node.map(|node| node.val);
-                }
-                current = next_node;
-            }
+        if self.head.is_none() {
+            return None;
         }
-        None // If the list is empty
+
+        if self.head.as_ref().unwrap().next.is_none() {
+            return self.remove_head();
+        }
+        //TODO
+        None
     }
 
     /**
      * remove target element if exist.
      */
     pub fn remove_first_hit(&mut self, val: i32) {
-        self.head = LinkedList::remove_elements(self.head.take(), val, false);
+        self.head = LinkedList::remove_elements(self.head.take(), val);
     }
-
-    pub fn remove_hit(&mut self, val: i32) {
-        let head = self.head.take();
-        self.head = LinkedList::remove_elements(head, val, true);
-    }
-
-    fn remove_elements(head: Option<Box<Node>>, val: i32, all: bool) -> Option<Box<Node>> {
+    fn remove_elements(head: Option<Box<Node>>, val: i32) -> Option<Box<Node>> {
         let mut dummy = Node { val: 0, next: head };
         let mut pre = &mut dummy;
         while let Some(ref mut node) = pre.next {
             if node.val == val {
                 pre.next = node.next.take();
-                if !all {
-                    break;
-                }
+                break;
             } else {
+                //TODO why not: pre = node.deref_mut();
                 pre = pre.next.as_mut().unwrap();
             }
         }
         dummy.next
+    }
+
+    pub fn remove_hit(&mut self, val: i32) {
+        // dummy can be Node rather than Option which can simplfy the code.
+        let mut dummy = Node {
+            val: 0,
+            next: self.head.take(),
+        };
+        let mut pre = &mut dummy;
+
+        // if next is not none.
+        while let Some(ref mut node) = pre.next {
+            if node.val == val {
+                //
+                pre.next = node.next.take();
+            } else {
+                // let a = &pre.next;
+                // let b = a.as_mut();
+                // let pre = b.unwrap();
+                pre = pre.next.as_mut().unwrap();
+            }
+        }
+        self.head = dummy.next
     }
 
     pub fn push_head(&mut self, val: i32) {
