@@ -67,6 +67,7 @@ impl LinkedList {
             if node.next.is_none() {
                 break;
             }
+            // unwrap return &mut Box<Node> which can be assign to &mut Node
             pre = pre.next.as_mut().unwrap();
         }
 
