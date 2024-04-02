@@ -83,26 +83,25 @@ impl LinkedList {
      * remove target element if exist.
      */
     pub fn remove_first_hit(&mut self, val: i32) {
-        self.head = LinkedList::remove_elements(self.head.take(), val);
-    }
-    fn remove_elements(head: Option<Box<Node>>, val: i32) -> Option<Box<Node>> {
-        let mut dummy = Node { val: 0, next: head };
+        let mut dummy = Node {
+            val: 0,
+            next: self.head.take(),
+        };
         let mut pre = &mut dummy;
         while let Some(ref mut node) = pre.next {
             if node.val == val {
                 pre.next = node.next.take();
                 break;
-            } else {
-                // compile failed, because the node is partially mutable borrow from pre.
-                // so the pre can't change.
-                // pre = node.deref_mut();
-                pre = pre.next.as_mut().unwrap();
             }
+            // compile failed, because the node is partially mutable borrow from pre.
+            // so the pre can't change.
+            // pre = node.deref_mut();
+            pre = pre.next.as_mut().unwrap();
         }
-        dummy.next
+        self.head = dummy.next
     }
 
-    pub fn remove_hit(&mut self, val: i32) {
+    pub fn remove_all_hit(&mut self, val: i32) {
         // dummy can be Node rather than Option which can simplfy the code.
         let mut dummy = Node {
             val: 0,
@@ -113,7 +112,6 @@ impl LinkedList {
         // if next is not none.
         while let Some(ref mut node) = pre.next {
             if node.val == val {
-                //
                 pre.next = node.next.take();
             } else {
                 // let a = &pre.next;
@@ -169,10 +167,28 @@ mod tests {
     use super::*;
 
     #[test]
+    fn test_remove_first_hit() {
+        let mut linked_list = LinkedList::from_vec(vec![0, 1, 2, 2, 2, 3, 4]);
+        linked_list.remove_first_hit(2);
+        assert_eq!(linked_list.remove_head().unwrap(), 0);
+        assert_eq!(linked_list.remove_head().unwrap(), 1);
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+        assert_eq!(linked_list.remove_head().unwrap(), 3);
+        assert_eq!(linked_list.remove_head().unwrap(), 4);
+    }
+
+    #[test]
+    fn test_remove_all_hit() {
+        let mut linked_list = LinkedList::from_vec(vec![0, 1, 1, 2]);
+        linked_list.remove_all_hit(1);
+        assert_eq!(linked_list.remove_head().unwrap(), 0);
+        assert_eq!(linked_list.remove_head().unwrap(), 2);
+    }
+
+    #[test]
     fn test_remove_tail() {
-        let mut linked_list = LinkedList::from_vec(vec![0]);
-        linked_list.append_tail_recursive(1);
-        linked_list.append_tail_recursive(2);
+        let mut linked_list = LinkedList::from_vec(vec![0, 1, 2]);
         assert_eq!(linked_list.remove_tail().unwrap(), 2);
         assert_eq!(linked_list.remove_tail().unwrap(), 1);
         assert_eq!(linked_list.remove_tail().unwrap(), 0);
