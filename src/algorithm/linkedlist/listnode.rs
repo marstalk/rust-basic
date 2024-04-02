@@ -82,7 +82,9 @@ impl LinkedList {
                 pre.next = node.next.take();
                 break;
             } else {
-                //TODO why not: pre = node.deref_mut();
+                // compile failed, because the node is partially mutable borrow from pre.
+                // so the pre can't change.
+                // pre = node.deref_mut();
                 pre = pre.next.as_mut().unwrap();
             }
         }
