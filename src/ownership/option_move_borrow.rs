@@ -31,6 +31,7 @@ mod tests {
         }
 
         // no partial move. which means that the next is still valid.
+        // the node.next.take() doesn't equals to `let a = node.next; let b = a.take();`
         let third = node.next.take();
         assert_eq!(third.is_some(), true);
         assert_eq!(third.unwrap().val, 3);

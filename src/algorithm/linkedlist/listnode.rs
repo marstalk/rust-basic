@@ -57,15 +57,25 @@ impl LinkedList {
     }
 
     pub fn remove_tail(&mut self) -> Option<i32> {
-        if self.head.is_none() {
-            return None;
+        let mut dummp = Node {
+            val: 0,
+            next: self.head.take(),
+        };
+        let mut pre = &mut dummp;
+
+        while let Some(ref mut node) = pre.next {
+            if node.next.is_none() {
+                break;
+            }
+            pre = pre.next.as_mut().unwrap();
         }
 
-        if self.head.as_ref().unwrap().next.is_none() {
-            return self.remove_head();
+        let res = pre.next.take();
+        self.head = dummp.next;
+        match res {
+            Some(node) => Some(node.val),
+            None => None,
         }
-        //TODO
-        None
     }
 
     /**
@@ -156,6 +166,17 @@ impl LinkedList {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_remove_tail() {
+        let mut linked_list = LinkedList::from_vec(vec![0]);
+        linked_list.append_tail_recursive(1);
+        linked_list.append_tail_recursive(2);
+        assert_eq!(linked_list.remove_tail().unwrap(), 2);
+        assert_eq!(linked_list.remove_tail().unwrap(), 1);
+        assert_eq!(linked_list.remove_tail().unwrap(), 0);
+        assert_eq!(linked_list.remove_tail(), None);
+    }
 
     #[test]
     fn test_append_tail_recursive() {
