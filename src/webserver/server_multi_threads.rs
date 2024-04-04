@@ -4,7 +4,11 @@ use std::{
     fs,
     io::{BufRead, BufReader, Write},
     net::{TcpListener, TcpStream},
-    thread::{self},
+    sync::{
+        mpsc::{self, Receiver},
+        Arc, Mutex,
+    },
+    thread::{self, JoinHandle},
     time::Duration,
 };
 
@@ -20,18 +24,53 @@ pub fn start_server() {
     }
 }
 
-pub struct ThreadPool {
-    count: i32,
+struct Worker {
+    id: usize,
+    handler: JoinHandle<()>,
 }
+
+impl Worker {
+    fn new(id: usize, receiver: Arc<Mutex<Receiver<Job>>>) -> Worker {
+        Worker {
+            id,
+            // for prodution env: use thread::Builder::new() -> Result<Thread, Error>
+            handler: thread::spawn(|| {
+                receiver;
+            }),
+        }
+    }
+}
+
+pub struct ThreadPool {
+    count: usize,
+    workers: Vec<Worker>,
+    sender: mpsc::Sender<Job>,
+}
+struct Job {}
 impl ThreadPool {
-    pub fn new(count: i32) -> ThreadPool {
-        ThreadPool { count }
+    pub fn new(count: usize) -> ThreadPool {
+        assert!(count > 0);
+        let (sender, receiver) = mpsc::channel();
+
+        let receiver_arc = Arc::new(Mutex::new(receiver));
+
+        let mut workers = Vec::with_capacity(count);
+        for id in 0..count {
+            workers.push(Worker::new(id, Arc::clone(&receiver_arc)));
+        }
+
+        ThreadPool {
+            count,
+            workers,
+            sender,
+        }
     }
 
     pub fn execute<F>(&self, function: F)
     where
-        F: Fn(),
+        F: FnOnce() + Send + 'static,
     {
+        function();
     }
 }
 
