@@ -10,6 +10,9 @@ pub struct LinkedList {
 }
 
 impl LinkedList {
+    pub fn new() -> LinkedList {
+        LinkedList { head: None }
+    }
     pub fn reverse_imperative(&mut self) {
         let mut current = self.head.take();
         let mut prev = None;
@@ -123,12 +126,13 @@ impl LinkedList {
         self.head = dummy.next
     }
 
-    pub fn push_head(&mut self, val: i32) {
+    pub fn push_head(&mut self, val: i32) -> &mut Self {
         let node = Box::new(Node {
             val: val,
             next: self.head.take(),
         });
         self.head = Some(node);
+        self
     }
 
     pub fn append_tail_imperative(&mut self, val: i32) {
@@ -236,8 +240,7 @@ mod tests {
     #[test]
     fn test_push_head() {
         let mut linked_list = LinkedList::from_vec(vec![0]);
-        linked_list.push_head(1);
-        linked_list.push_head(2);
+        linked_list.push_head(1).push_head(2);
 
         assert_eq!(linked_list.remove_head().unwrap(), 2);
         assert_eq!(linked_list.remove_head().unwrap(), 1);
