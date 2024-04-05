@@ -1,15 +1,17 @@
+use std::{fmt::Display, path::Iter};
+
 #[derive(Debug)]
-pub struct Node<T: Copy> {
+pub struct Node<T: Eq + Display + Clone> {
     val: T,
     next: Option<Box<Node<T>>>,
 }
 
 #[derive(Debug)]
-pub struct LinkedList<T: Copy> {
+pub struct LinkedList<T: Eq + Display + Clone> {
     head: Option<Box<Node<T>>>,
 }
 
-impl<T: Copy + Eq> LinkedList<T> {
+impl<T: Eq + Display + Clone> LinkedList<T> {
     pub fn new() -> LinkedList<T> {
         LinkedList { head: None }
     }
@@ -177,11 +179,85 @@ impl<T: Copy + Eq> LinkedList<T> {
 
         linked_list
     }
+
+    pub fn tail_value(&self) -> Option<&T> {
+        if self.head.is_none() {
+            return None;
+        } else {
+            let mut pre = self.head.as_ref().unwrap();
+            while let Some(ref next) = pre.next {
+                pre = next;
+            }
+            return Some(&pre.val);
+        }
+    }
+}
+
+impl<T: Eq + Display + Clone> Display for LinkedList<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        if self.head.is_none() {
+            write!(f, "None\n").unwrap();
+        } else {
+            let mut next = self.head.as_ref();
+            while let Some(current) = next {
+                write!(f, "{}->\n", current.val)?;
+                next = current.next.as_ref();
+            }
+            write!(f, "None\n")?;
+        }
+
+        Ok(())
+    }
+}
+
+impl<T: Eq + Display + Clone> Clone for LinkedList<T> {
+    fn clone(&self) -> LinkedList<T> {
+        let mut new_linked_list = LinkedList { head: None };
+        let mut current = &self.head;
+        while let Some(ref node) = current {
+            new_linked_list.push_head(node.val.clone());
+            current = &node.next;
+        }
+
+        new_linked_list
+    }
+}
+
+impl<T: Eq + Display + Clone> Iterator for LinkedList<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        todo!()
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_tail_value() {
+        let mut linked_list = LinkedList::from_vec(vec![1, 2, 3, 4, 4]);
+        assert_eq!(linked_list.tail_value(), Some(&4));
+        linked_list.remove_tail();
+        assert_eq!(linked_list.tail_value(), Some(&4));
+
+        linked_list.remove_tail();
+        assert_eq!(linked_list.tail_value(), Some(&3));
+        linked_list.remove_tail();
+        assert_eq!(linked_list.tail_value(), Some(&2));
+
+        linked_list.remove_tail();
+        assert_eq!(linked_list.tail_value(), Some(&1));
+
+        linked_list.remove_tail();
+        assert_eq!(linked_list.tail_value(), None);
+    }
+
+    #[test]
+    fn test_display() {
+        let linked_list = LinkedList::from_vec(vec![1, 2, 3, 4, 4]);
+        println!("{}", linked_list);
+    }
 
     #[test]
     fn test_remove_first_hit() {
