@@ -20,9 +20,25 @@ pub fn zip(v1: Vec<i32>, v2: Vec<i32>) -> String {
     .collect()
 }
 
+pub fn enumerate(v: Vec<i32>) -> String {
+    let mut res = String::from("");
+    for (i, x) in v.iter().enumerate() {
+        res.push_str(&format!("{}:{},", i, x));
+    }
+    res
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_enumerate() {
+        let v = vec![1, 2, 3];
+        let s = enumerate(v);
+        assert_eq!(s, "0:1,1:2,2:3,");
+    }
+
     #[test]
     fn test_zip() {
         let v1 = vec![1, 2, 3];

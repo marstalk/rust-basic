@@ -1,4 +1,4 @@
-use std::{fmt::Display, path::Iter};
+use std::fmt::Display;
 
 #[derive(Debug)]
 pub struct Node<T: Eq + Display + Clone> {
