@@ -10,6 +10,7 @@ pub mod backtracing;
 pub mod linkedlist;
 pub mod mvcc;
 pub mod other;
+pub mod stack;
 pub mod string;
 pub mod tree;
 pub mod vector;
