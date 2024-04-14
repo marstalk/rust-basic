@@ -4,7 +4,7 @@ pub struct Solution {}
  * 1. two sum
  * 2. three sum
  * 3. four sum
- * 4. n sum TODO
+ * 4. n sum
  */
 impl Solution {
     pub fn all_two_sum(mut nums: Vec<i32>, target: i32) -> Option<Vec<Vec<i32>>> {
