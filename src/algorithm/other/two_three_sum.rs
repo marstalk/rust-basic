@@ -87,6 +87,9 @@ impl Solution {
         }
     }
 
+    /**
+     * make sure the nums is already sorted in acending order.
+     */
     fn all_two_sum_with_sorted_nums(
         nums: &Vec<i32>,
         target: i32,
@@ -119,11 +122,76 @@ impl Solution {
         }
         res
     }
+
+    pub fn n_sum(mut nums: Vec<i32>, target: i32, n: i32) -> Vec<Vec<i32>> {
+        // 1. make sure the nums is sorted.
+        nums.sort();
+        Solution::n_sum_helper(&nums, target, n, 0, nums.len() - 1)
+    }
+
+    fn n_sum_helper(
+        nums: &Vec<i32>,
+        target: i32,
+        n: i32,
+        start: usize,
+        end: usize,
+    ) -> Vec<Vec<i32>> {
+        let mut res = Vec::new();
+        // 0. if start is bigger or equal to end, or there is no enough numbers for n sum, then return empty.
+        if start >= end || end - start < (n - 1) as usize {
+            return res;
+        }
+
+        // 1. base case: when n is two
+        if n == 2 {
+            return Solution::all_two_sum_with_sorted_nums(&nums, target, start, end);
+        }
+
+        // 2. else recursive:
+        let mut i = start;
+        while i <= end {
+            let smaller_target = target - nums[i];
+            let rtn = Solution::n_sum_helper(nums, smaller_target, n - 1, i + 1, end);
+            for r in rtn {
+                res.push(vec![nums[i]].into_iter().chain(r.into_iter()).collect());
+            }
+            while i < end - 1 && nums[i] == nums[i + 1] {
+                i += 1;
+            }
+            i += 1;
+        }
+
+        res
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_n_sum() {
+        assert_eq!(
+            Solution::n_sum(vec![1, 2, 3, 4, 5, 6], 7, 2),
+            vec![vec![1, 6], vec![2, 5], vec![3, 4]]
+        );
+
+        assert_eq!(
+            Solution::n_sum(vec![1, 2, 3, 4, 5], 9, 3),
+            vec![vec![1, 3, 5], vec![2, 3, 4]]
+        );
+
+        assert_eq!(
+            Solution::n_sum(vec![1, 1, 1, 2, 2, 2, 3, 4, 5, 6], 13, 4),
+            vec![
+                vec![1, 1, 5, 6],
+                vec![1, 2, 4, 6],
+                vec![1, 3, 4, 5],
+                vec![2, 2, 3, 6],
+                vec![2, 2, 4, 5]
+            ]
+        );
+    }
 
     #[test]
     fn test_all_three_sum() {
