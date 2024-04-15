@@ -25,7 +25,7 @@ pub mod functions;
 pub mod module;
 pub mod oop;
 pub mod ownership;
+pub mod primatives;
 pub mod scopes;
 pub mod smartpointers;
 pub mod webserver;
-pub mod primatives;

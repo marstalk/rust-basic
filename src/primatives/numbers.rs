@@ -1,7 +1,7 @@
 /**
  * check operation can avoid overflow
  */
-pub fn add_one_checked(i: i32) -> i32{
+pub fn add_one_checked(i: i32) -> i32 {
     match i.checked_add(1) {
         Some(res) => res,
         None => 0,
