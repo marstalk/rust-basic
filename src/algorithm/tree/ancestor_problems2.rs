@@ -51,7 +51,6 @@ pub fn lowest_common_ancestor2(btree: &BTree, p: i32, q: i32) -> Option<i32> {
     None
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
