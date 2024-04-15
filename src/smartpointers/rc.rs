@@ -7,14 +7,14 @@ impl Drop for Student {
     }
 }
 
-fn simple_return(i: i32) -> i32 {
+pub fn simple_return(i: i32) -> i32 {
     i
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{ops::Deref, rc::Rc};
+    use std::rc::Rc;
 
     #[test]
     fn test_value_ref() {
