@@ -3,12 +3,12 @@
 use std::collections::LinkedList;
 
 pub struct Node {
-    val: i32,
-    left: Option<Box<Node>>,
-    right: Option<Box<Node>>,
+    pub val: i32,
+    pub left: Option<Box<Node>>,
+    pub right: Option<Box<Node>>,
 }
 pub struct BTree {
-    root: Option<Box<Node>>,
+    pub root: Option<Box<Node>>,
 }
 impl BTree {
     pub fn from_vec(vec: Vec<i32>) -> BTree {
