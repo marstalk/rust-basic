@@ -13,6 +13,7 @@ pub mod advance_features;
  * 11. concurrent
  * 12. OOP
  * 13. advanced features
+ * 14. numbers: special features about numbers: checked_add\MIN\MAX
  */
 pub mod algorithm;
 pub mod attribute;
@@ -27,3 +28,4 @@ pub mod ownership;
 pub mod scopes;
 pub mod smartpointers;
 pub mod webserver;
+pub mod primatives;
