@@ -5,8 +5,10 @@
  * 4. tree
  * 5. backtracing
  * 6. mvcc
+ * 7. bst
  */
 pub mod backtracing;
+pub mod bst;
 pub mod linkedlist;
 pub mod mvcc;
 pub mod other;
