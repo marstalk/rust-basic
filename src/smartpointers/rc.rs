@@ -7,11 +7,22 @@ impl Drop for Student {
     }
 }
 
+fn simple_return(i: i32) -> i32 {
+    i
+}
+
 #[cfg(test)]
 mod tests {
-    use std::rc::Rc;
-
     use super::*;
+    use std::{ops::Deref, rc::Rc};
+
+    #[test]
+    fn test_value_ref() {
+        let rc = Rc::new(4);
+        assert_eq!(rc, Rc::new(4));
+        // have to deref by hand
+        println!("{:?}", simple_return(*rc));
+    }
 
     #[test]
     fn test_student_rc() {
