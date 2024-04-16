@@ -35,7 +35,7 @@ impl Worker {
             id,
             // for prodution env: use thread::Builder::new() -> Result<Thread, Error>
             handler: thread::spawn(|| {
-                receiver;
+                drop(receiver);
             }),
         }
     }
