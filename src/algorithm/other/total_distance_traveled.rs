@@ -11,7 +11,7 @@ Note: Injection from the additional tank is not continuous. It happens suddenly 
 Example 1:
 Input: mainTank = 5, additionalTank = 10
 Output: 60
-Explanation: 
+Explanation:
 After spending 5 litre of fuel, fuel remaining is (5 - 5 + 1) = 1 litre and distance traveled is 50km.
 After spending another 1 litre of fuel, no fuel gets injected in the main tank and the main tank becomes empty.
 Total distance traveled is 60km.
@@ -19,7 +19,7 @@ Total distance traveled is 60km.
 Example 2:
 Input: mainTank = 1, additionalTank = 2
 Output: 10
-Explanation: 
+Explanation:
 After spending 1 litre of fuel, the main tank becomes empty.
 Total distance traveled is 10km.
 
@@ -27,8 +27,8 @@ Constraints:
 1 <= mainTank, additionalTank <= 100
  */
 
-pub struct Solution{}
-impl Solution{
+pub struct Solution {}
+impl Solution {
     pub fn total_distance_traveled(main_tank: i32, additional_tank: i32) -> i32 {
         let mut main_tank = main_tank;
         let mut additional_tank = additional_tank;

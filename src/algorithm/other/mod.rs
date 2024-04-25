@@ -9,6 +9,6 @@
 pub mod advantage_shuffle;
 pub mod container_with_most_water;
 pub mod remove_all_zero;
+pub mod total_distance_traveled;
 pub mod trapping_rain_water;
 pub mod two_three_sum;
-pub mod total_distance_traveled;
